@@ -13,7 +13,7 @@ Vagrant + VBox for plutus playground
 * Navigate to a directory of your choice and do
 
 ```ssh
-git clone https://github.com/edwint88/plutus-vm plutus-vm
+git clone https://github.com/muggy-pool/plutus-vm plutus-vm
 ```
 
 * Navigate to inner-folder called vagrant.
