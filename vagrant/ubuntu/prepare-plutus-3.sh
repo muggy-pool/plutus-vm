@@ -40,18 +40,11 @@ git checkout \$build_tag
 cp plutus-playground-client/package.json plutus-playground-client/package.json.bak 
 sed 's/--mode=development/--mode=development --host 0.0.0.0/g' plutus-playground-client/package.json.bak > plutus-playground-client/package.json
 
-# Enter nix-shell environment (and build if needed)
-nix-shell
-
 # Build and execute week 1 exercises
-cd ~/git/plutus-pioneer-program/code/week01
-cabal update
-cabal build
-build-and-serve-docs &
-cd ~/git/plutus-apps/plutus-playground-client
-plutus-playground-server &
-sleep 60
-npm start
+nix-shell --command "cd ~/git/plutus-pioneer-program/code/week01; cabal update; cabal build; build-and-serve-docs &"
+nix-shell --command "cd ~/git/plutus-apps/plutus-playground-client; plutus-playground-server &"
+sleep 120
+nix-shell --command "cd ~/git/plutus-apps/plutus-playground-client; npm start &"
 EOF
 
 
