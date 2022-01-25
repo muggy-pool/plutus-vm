@@ -30,7 +30,7 @@ git clone https://github.com/input-output-hk/plutus-apps.git
 
 # Configure script for week 01 class
 touch week01-updatePlutus.sh
-cat >> /week01-updatePlutus.sh <<EOF
+cat >> week01-updatePlutus.sh <<EOF
 cd ~/git/plutus-pioneer-program/code/week01
 build_tag=\$(grep -A1 plutus-apps.git cabal.project | grep tag | awk '{print \$2}')
 cd ~/git/plutus-apps
@@ -40,18 +40,11 @@ git checkout \$build_tag
 cp plutus-playground-client/package.json plutus-playground-client/package.json.bak 
 sed 's/--mode=development/--mode=development --host 0.0.0.0/g' plutus-playground-client/package.json.bak > plutus-playground-client/package.json
 
-# Enter nix-shell environment (and build if needed)
-nix-shell
-
 # Build and execute week 1 exercises
-cd ~/git/plutus-pioneer-program/code/week01
-cabal update
-cabal build
-build-and-serve-docs &
-cd ~/git/plutus-apps/plutus-playground-client
-plutus-playground-server &
-sleep 60
-npm start
+nix-shell --command "cd ~/git/plutus-pioneer-program/code/week01; cabal update; cabal build; build-and-serve-docs &"
+nix-shell --command "cd ~/git/plutus-apps/plutus-playground-client; plutus-playground-server &"
+sleep 120
+nix-shell --command "cd ~/git/plutus-apps/plutus-playground-client; npm start &"
 EOF
 
 
