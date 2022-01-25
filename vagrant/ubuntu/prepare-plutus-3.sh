@@ -47,5 +47,23 @@ sleep 120
 nix-shell --command "cd ~/git/plutus-apps/plutus-playground-client; npm start &"
 EOF
 
+# Configure script for week 02 class
+touch week02-updatePlutus.sh
+cat >> week02-updatePlutus.sh <<EOF
+cd ~/git/plutus-pioneer-program/code/week02
+build_tag=\$(grep -A1 plutus-apps.git cabal.project | grep tag | awk '{print \$2}')
+cd ~/git/plutus-apps
+git checkout \$build_tag
 
-#/bin/bash ./week01-updatePlutus.sh
+# Add host 0.0.0.0 -> to access the frontend in browser 192.168.5.x
+cp plutus-playground-client/package.json plutus-playground-client/package.json.bak 
+sed 's/--mode=development/--mode=development --host 0.0.0.0/g' plutus-playground-client/package.json.bak > plutus-playground-client/package.json
+
+# Build and execute week 1 exercises
+nix-shell --command "cd ~/git/plutus-pioneer-program/code/week02; cabal update; cabal build; build-and-serve-docs &"
+nix-shell --command "cd ~/git/plutus-apps/plutus-playground-client; plutus-playground-server &"
+sleep 120
+nix-shell --command "cd ~/git/plutus-apps/plutus-playground-client; npm start &"
+EOF
+
+#/bin/bash ./week02-updatePlutus.sh
